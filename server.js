@@ -29,7 +29,7 @@ app.post('/api/v1/find-urls', (req, res) => {
 });
 
 app.post('/api/v1/find-urls2', function(req, res) {
-    res.status(200).json({data:req.body}); // will give { name: 'Lorem',age:18'} in response
+    res.status(200).send(JSON.stringify({data:req.body})); // will give { name: 'Lorem',age:18'} in response
 });
 
 app.post('/api/v1/extract-data', (req, res) => {
