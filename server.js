@@ -18,7 +18,7 @@ app.get('/', function(req, res) {
 });
 
 // get all find urls
-app.get('/api/v1/find-urls', (req, res) => {
+app.post('/api/v1/find-urls', (req, res) => {
     res.status(200).send({
         success: 'true',
         message: 'find-urls',
