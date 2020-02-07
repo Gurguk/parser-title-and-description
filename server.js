@@ -25,10 +25,9 @@ app.get('/api/v1/find-urls', (req, res) => {
     })
 });
 
-app.get('/api/v1/extract-data', (req, res) => {
+app.post('/api/v1/extract-data', (req, res) => {
     var results = [];
-    console.log(req.body);
-    var URL = req.body.strArr.split(",");
+    var URL = JSON.parse(req.body.urls);
     var q = tress(function(url, callback){
 
         //тут мы обрабатываем страницу с адресом url
