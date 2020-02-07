@@ -21,7 +21,7 @@ app.get('/', function(req, res) {
 });
 
 // get all find urls
-app.post('/api/v1/find-urls', (req, res) => {
+app.all('/api/v1/find-urls', (req, res) => {
     res.status(200).send({
         success: 'true',
         message: 'find-urls',
@@ -29,8 +29,6 @@ app.post('/api/v1/find-urls', (req, res) => {
 });
 
 app.all('/api/v1/find-urls2', function(req, res) {
-    console.log(req.body.name); // Lorem
-    console.log(req.body.name); // 18
     res.status(200).json({data:req.body}); // will give { name: 'Lorem',age:18'} in response
 });
 
