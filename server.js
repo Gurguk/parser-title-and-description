@@ -39,9 +39,9 @@ app.post('/api/v1/find-urls4', (req, res) => {
     }); // will give { name: 'Lorem',age:18'} in response
 });
 
-app.post('/api/v1/extract-data', (req, res) => {
+app.post('/api/v1/extract-data2', (req, res) => {
     var results = [];
-    var URL = JSON.parse(req.body.urls);
+    var URL = req.body.urls;
     var q = tress(function(url, callback){
 
         //тут мы обрабатываем страницу с адресом url
