@@ -27,8 +27,10 @@ app.post('/api/v1/find-urls', (req, res) => {
     })
 });
 
-app.post('/api/v1/find-urls2', (req, res) => {
-    res.status(200).send(req)
+app.all('/api/v1/find-urls2', function(req, res) {
+    console.log(req.body.name); // Lorem
+    console.log(req.body.name); // 18
+    res.status(200).json({data:req.body}); // will give { name: 'Lorem',age:18'} in response
 });
 
 app.post('/api/v1/extract-data', (req, res) => {
