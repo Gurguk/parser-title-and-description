@@ -5,6 +5,7 @@ var express = require('express'),
 var tress = require('tress');
 var needle = require('needle');
 var cheerio = require('cheerio');
+var bodyParser = require('body-parser');
 var options = {
     compressed         : true, // sets 'Accept-Encoding' to 'gzip, deflate, br'
     follow_max         : 5,    // follow up to five redirects
@@ -12,8 +13,8 @@ var options = {
 var app = express();
 
 var ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
-app.use(express.urlencoded());
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.get('/', function(req, res) {
     res.send('API for extraction titles');
