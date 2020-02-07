@@ -6,6 +6,7 @@ var tress = require('tress');
 var needle = require('needle');
 var cheerio = require('cheerio');
 var bodyParser = require('body-parser');
+var timeout = require('connect-timeout');
 var options = {
     compressed         : true, // sets 'Accept-Encoding' to 'gzip, deflate, br'
     follow_max         : 5,    // follow up to five redirects
@@ -15,11 +16,7 @@ var app = express();
 var ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(timeout(600000));
-app.use(haltOnTimedout);
-function haltOnTimedout(req, res, next){
-    if (!req.timedout) next();
-}
+
 app.get('/', function(req, res) {
     res.send('API for extraction titles');
 });
@@ -50,6 +47,7 @@ app.post('/api/v1/extract', (req, res) => {
 
 });
 
-app.listen(8080, ip);
 
+var server = app.listen(8080, ip);
+server.setTimeout(500000);
 module.exports = app;
