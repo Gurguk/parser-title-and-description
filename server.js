@@ -27,6 +27,7 @@ app.get('/api/v1/find-urls', (req, res) => {
 
 app.get('/api/v1/extract-data', (req, res) => {
     var results = [];
+    console.log(req.body);
     var URL = req.body.strArr.split(",");
     var q = tress(function(url, callback){
 
