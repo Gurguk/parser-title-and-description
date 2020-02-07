@@ -20,26 +20,7 @@ app.get('/', function(req, res) {
     res.send('API for extraction titles');
 });
 
-// get all find urls
-app.post('/api/v1/find-urls', (req, res) => {
-    res.status(200).send({
-        success: 'true',
-        message: 'find-urls',
-    })
-});
-
-app.post('/api/v1/find-urls3', (req, res) => {
-    res.status(200).send({
-        data:req.body
-    }); // will give { name: 'Lorem',age:18'} in response
-});
-app.post('/api/v1/find-urls4', (req, res) => {
-    res.status(200).send({
-        data: 'test'
-    }); // will give { name: 'Lorem',age:18'} in response
-});
-
-app.post('/api/v1/extract-data2', (req, res) => {
+app.post('/api/v1/extract-data', (req, res) => {
     var results = [];
     var URL = req.body.urls;
     var q = tress(function(url, callback){
@@ -57,7 +38,7 @@ app.post('/api/v1/extract-data2', (req, res) => {
     }, 10);
     // эта функция выполнится, когда в очереди закончатся ссылки
     q.drain = function(){
-        res.status(200).send(JSON.stringify(results));
+        res.status(200).json(JSON.stringify(results));
     }
 
 // добавляем в очередь ссылку на первую страницу списка
