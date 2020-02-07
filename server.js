@@ -17,7 +17,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(timeout(600000));
 app.use(haltOnTimedout);
-
+function haltOnTimedout(req, res, next){
+    if (!req.timedout) next();
+}
 app.get('/', function(req, res) {
     res.send('API for extraction titles');
 });
