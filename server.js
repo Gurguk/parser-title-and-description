@@ -24,7 +24,19 @@ app.get('/', function(req, res) {
 app.post('/api/v1/extract', (req, res) => {
     var results = [];
     var URL = req.body.urls;
+    var q = tress(function(url, callback){
 
+        //тут мы обрабатываем страницу с адресом url
+        needle.get(url, options, function(err, res, body){
+            if (err) throw err;
+            var $ = cheerio.load(body);
+            var title = $("title").text();
+            var description = $("meta[name='description']").attr('content') || '';
+            results.push({url: url, title: title, description: description});
+
+            callback(); //вызываем callback в конце
+        });
+    }, 10);
     // эта функция выполнится, когда в очереди закончатся ссылки
     q.drain = function(){
         res.status(200).json(JSON.stringify(results));
@@ -34,19 +46,7 @@ app.post('/api/v1/extract', (req, res) => {
     q.push(URL);
 
 });
-var q = tress(function(url, callback){
 
-    //тут мы обрабатываем страницу с адресом url
-    needle.get(url, options, function(err, res, body){
-        if (err) throw err;
-        var $ = cheerio.load(body);
-        var title = $("title").text();
-        var description = $("meta[name='description']").attr('content') || '';
-        results.push({url: url, title: title, description: description});
-
-        callback(); //вызываем callback в конце
-    });
-}, 10);
 
 var server = app.listen(8080, ip);
 server.setTimeout(500000);
