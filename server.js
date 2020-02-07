@@ -20,7 +20,7 @@ app.get('/', function(req, res) {
     res.send('API for extraction titles');
 });
 
-app.post('/api/v1/extract-data3', (req, res) => {
+app.post('/api/v1/extract', (req, res) => {
     var results = [];
     var URL = req.body.urls;
     var q = tress(function(url, callback){
@@ -30,8 +30,8 @@ app.post('/api/v1/extract-data3', (req, res) => {
             if (err) throw err;
             var $ = cheerio.load(body);
             var title = $("title").text();
-            var description = $("meta[name='description']").attr('content');
-            results.push({title: title, description: description, url: url});
+            var description = $("meta[name='description']").attr('content') || '';
+            results.push({url: url, title: title, description: description});
 
             callback(); //вызываем callback в конце
         });
