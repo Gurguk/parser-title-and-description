@@ -39,7 +39,7 @@ var q = tress(function(url, callback){
         var $ = cheerio.load(body);
         var title = $("title").text();
         var description = $("meta[name='description']").attr('content');
-        result.push({title: title, description: description, url: url});
+        results.push({title: title, description: description, url: url});
 
         callback(); //вызываем callback в конце
     });
@@ -47,7 +47,7 @@ var q = tress(function(url, callback){
 app.get('/api/v1/extract-data', (req, res) => {
     // эта функция выполнится, когда в очереди закончатся ссылки
     q.drain = function(){
-        res.status(200).send(JSON.stringify(result));
+        res.status(200).send(JSON.stringify(results));
     }
 
 // добавляем в очередь ссылку на первую страницу списка
