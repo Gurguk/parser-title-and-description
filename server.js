@@ -20,7 +20,7 @@ app.get('/', function(req, res) {
     res.send('API for extraction titles');
 });
 
-app.post('/api/v1/extract-data', (req, res) => {
+app.post('/api/v1/extract-data3', (req, res) => {
     var results = [];
     var URL = req.body.urls;
     var q = tress(function(url, callback){
