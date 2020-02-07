@@ -26,7 +26,7 @@ app.post('/api/v1/find-urls', (req, res) => {
 });
 
 app.post('/api/v1/find-urls2', (req, res) => {
-    res.status(200).send(req.data)
+    res.status(200).send(req.params)
 });
 
 app.post('/api/v1/extract-data', (req, res) => {
