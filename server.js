@@ -12,8 +12,8 @@ var options = {
 var app = express();
 
 var ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(express.urlencoded());
+app.use(express.json());
 
 app.get('/', function(req, res) {
     res.send('API for extraction titles');
@@ -28,7 +28,7 @@ app.post('/api/v1/find-urls', (req, res) => {
 });
 
 app.post('/api/v1/find-urls2', (req, res) => {
-    res.status(200).send(req.body)
+    res.status(200).send(req)
 });
 
 app.post('/api/v1/extract-data', (req, res) => {
