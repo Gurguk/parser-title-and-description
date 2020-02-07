@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "test": "IP=0.0.0.0 PORT=3030 mocha --timeout 5000 tests/*_test.js"
   },
   "keywords": [],
   "author": "",
@@ -11,19 +12,15 @@
   "description": "",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
+    "express": "^4.17.1",
     "iconv-lite": "^0.5.1",
     "needle": "^2.3.2",
     "request": "^2.88.0",
-    "tress": "^1.1.4",
-    "express": "^4.13.4"
+    "tress": "^1.1.4"
   },
   "engine": {
     "node": "*",
     "npm": "*"
-  },
-  "scripts": {
-    "start": "node server.js",
-    "test": "IP=0.0.0.0 PORT=3030 mocha --timeout 5000 tests/*_test.js"
   },
   "repository": {
     "type": "git",
