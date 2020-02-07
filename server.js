@@ -21,14 +21,14 @@ app.get('/', function(req, res) {
 });
 
 // get all find urls
-app.all('/api/v1/find-urls', (req, res) => {
+app.post('/api/v1/find-urls', (req, res) => {
     res.status(200).send({
         success: 'true',
         message: 'find-urls',
     })
 });
 
-app.all('/api/v1/find-urls2', function(req, res) {
+app.post('/api/v1/find-urls2', function(req, res) {
     res.status(200).json({data:req.body}); // will give { name: 'Lorem',age:18'} in response
 });
 
