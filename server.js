@@ -15,6 +15,8 @@ var app = express();
 var ip = process.env.IP || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(timeout(600000));
+app.use(haltOnTimedout);
 
 app.get('/', function(req, res) {
     res.send('API for extraction titles');
