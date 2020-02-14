@@ -49,5 +49,4 @@ app.post('/api/v1/extract', (req, res) => {
 
 
 var server = app.listen(8080, ip);
-server.setTimeout(500000);
 module.exports = app;
