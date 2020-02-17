@@ -7,6 +7,9 @@ var needle = require('needle');
 var cheerio = require('cheerio');
 var bodyParser = require('body-parser');
 var timeout = require('connect-timeout');
+var htmlToText = require('html-to-text');
+var unique = require('unique-words');
+var wordcount = require('wordcount');
 var options = {
     compressed         : true, // sets 'Accept-Encoding' to 'gzip, deflate, br'
     follow_max         : 5,    // follow up to five redirects
@@ -29,10 +32,21 @@ app.post('/api/v1/extract', (req, res) => {
         //тут мы обрабатываем страницу с адресом url
         needle.get(url, options, function(err, res, body){
             if (err) throw err;
+            var text = htmlToText.fromString(body, {
+                wordwrap: 130
+            });
+            var words = unique.counts(text.toLowerCase());
+            var word_count = wordcount(words);
             var $ = cheerio.load(body);
             var title = $("title").text();
             var description = $("meta[name='description']").attr('content') || '';
-            results.push({url: url, title: title, description: description});
+            results.push({
+                url: url,
+                title: title,
+                description: description,
+                words: words,
+                wordcount: word_count
+            });
 
             callback(); //вызываем callback в конце
         });
