@@ -7,8 +7,8 @@ var needle = require('needle');
 var cheerio = require('cheerio');
 var bodyParser = require('body-parser');
 var timeout = require('connect-timeout');
-var htmlToText = require('html-to-text');
-var unique = require('unique-words');
+var h2p = require('html2plaintext')
+var unique_words = require('unique-words');
 var wordcount = require('wordcount');
 var options = {
     compressed         : true, // sets 'Accept-Encoding' to 'gzip, deflate, br'
@@ -32,11 +32,10 @@ app.post('/api/v1/extract', (req, res) => {
         //тут мы обрабатываем страницу с адресом url
         needle.get(url, options, function(err, res, body){
             if (err) throw err;
-            var text = htmlToText.fromString(body, {
-                wordwrap: 130
-            });
-            var words = unique.counts(text.toLowerCase());
-            var word_count = wordcount(words);
+            body = body.replace(/<\!--.*?-->/gs, "");
+            var text = h2p(body);
+            var words = countWords(text.toLowerCase());
+            var word_count = Object.values(words).reduce((a, b) => a + b, 0)
             var $ = cheerio.load(body);
             var title = $("title").text();
             var description = $("meta[name='description']").attr('content') || '';
@@ -64,3 +63,22 @@ app.post('/api/v1/extract', (req, res) => {
 
 var server = app.listen(8080, ip);
 module.exports = app;
+function countWords(sentence) {
+    var index = {},
+        words = sentence
+            .replace(/[.,?!:;()"*'-]/gs, " ")
+            .replace(/\s+/gs, " ")
+            .split(" ");
+
+    words.forEach(function (word) {
+        word = word.replace(/[^a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ]/gi, "");
+        if(word!='') {
+            if (!(index.hasOwnProperty(word))) {
+                index[word] = 0;
+            }
+            index[word]++;
+        }
+    });
+
+    return index;
+}
