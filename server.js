@@ -7,11 +7,9 @@ var needle = require('needle');
 var cheerio = require('cheerio');
 var bodyParser = require('body-parser');
 var timeout = require('connect-timeout');
-var h2p = require('html2plaintext')
-var unique_words = require('unique-words');
-var wordcount = require('wordcount');
+var h2p = require('html2plaintext');
 var options = {
-    compressed         : true, // sets 'Accept-Encoding' to 'gzip, deflate, br'
+    compressed         : false, // sets 'Accept-Encoding' to 'gzip, deflate, br'
     follow_max         : 5,    // follow up to five redirects
 }
 var app = express();

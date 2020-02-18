@@ -2,11 +2,11 @@ var tress = require('tress');
 var needle = require('needle');
 var cheerio = require('cheerio');
 var options = {
-    compressed         : true, // sets 'Accept-Encoding' to 'gzip, deflate, br'
+    compressed         : false, // sets 'Accept-Encoding' to 'gzip, deflate, br'
     follow_max         : 5,    // follow up to five redirects
 }
 var URL = [
-    'https://www.google.com/search?num=100&q=seo+%22%D0%93%D0%BE%D1%81%D1%82%D0%B5%D0%B2%D0%BE%D0%B9+%D0%BF%D0%BE%D1%81%D1%82%22'
+    'https://www.smag.kz/'
 ];
 var results = [];
 
