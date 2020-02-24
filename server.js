@@ -44,10 +44,12 @@ app.post('/api/v1/extract', (req, res) => {
             var $ = cheerio.load(body);
             var title = $("title").text();
             var description = $("meta[name='description']").attr('content') || '';
+            var nosnippets = $("meta[name='robots']").attr('content') || '';
             results.push({
                 url: url,
                 title: title,
                 description: description,
+                nosnippets: nosnippets,
                 words: words,
                 wordcount: word_count
             });
