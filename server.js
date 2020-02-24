@@ -7,6 +7,7 @@ var needle = require('needle');
 var cheerio = require('cheerio');
 var bodyParser = require('body-parser');
 var timeout = require('connect-timeout');
+var pretty = require('html');
 var h2p = require('html2plaintext');
 var options = {
     compressed         : false, // sets 'Accept-Encoding' to 'gzip, deflate, br'
@@ -31,7 +32,13 @@ app.post('/api/v1/extract', (req, res) => {
         needle.get(url, options, function(err, res, body){
             if (err) throw err;
             body = body.replace(/<\!--.*?-->/gs, "");
+            body = body.replace(/<noscript>.*?<\/noscript>/gs, "");
+            body = pretty.prettyPrint(body);
             var text = h2p(body);
+            text = text.replace(/-\s/gs, "");
+            // text = text.replace(/\[(.*?)\]/gs, "");
+            text = text.replace(/[,?!:;()"*']/gs, " ");
+
             var words = countWords(text.toLowerCase());
             var word_count = Object.values(words).reduce((a, b) => a + b, 0)
             var $ = cheerio.load(body);
@@ -64,12 +71,11 @@ module.exports = app;
 function countWords(sentence) {
     var index = {},
         words = sentence
-            .replace(/[.,?!:;()"*'-]/gs, " ")
             .replace(/\s+/gs, " ")
             .split(" ");
 
     words.forEach(function (word) {
-        word = word.replace(/[^a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ]/gi, "");
+        word = word.replace(/[^0-9a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ-]/gi, "");
         if(word!='') {
             if (!(index.hasOwnProperty(word))) {
                 index[word] = 0;
