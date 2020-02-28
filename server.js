@@ -35,6 +35,9 @@ app.post('/api/v1/extract', (req, res) => {
             body = body.replace(/<noscript>.*?<\/noscript>/gs, "");
             body = pretty.prettyPrint(body);
             var text = h2p(body);
+            var symbols_count_without_space = text.replace(/\s/gs, '').length;
+
+            var symbols_count= text.replace(/\s{2,}/gs, ' ').length;
             text = text.replace(/-\s/gs, "");
             // text = text.replace(/\[(.*?)\]/gs, "");
             text = text.replace(/[,?!:;()"*']/gs, " ");
@@ -51,7 +54,9 @@ app.post('/api/v1/extract', (req, res) => {
                 description: description,
                 nosnippets: nosnippets,
                 words: words,
-                wordcount: word_count
+                wordcount: word_count,
+                symbolscountws: symbols_count_without_space,
+                symbolscount: symbols_count
             });
 
             callback(); //вызываем callback в конце
