@@ -50,8 +50,8 @@ app.post('/api/v1/extract', (req, res) => {
             var nosnippets = $("meta[name='robots']").attr('content') || '';
             results.push({
                 url: url,
-                title: title,
-                description: description,
+                title: title.replace(/\s{2,}/gs, ' '),
+                description: description.replace(/\s{2,}/gs, ' '),
                 nosnippets: nosnippets,
                 words: words,
                 wordcount: word_count,
