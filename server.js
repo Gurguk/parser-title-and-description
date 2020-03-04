@@ -1,7 +1,7 @@
 var express = require('express'),
     fs = require('fs'),
     app = express();
-
+var parseurl = require('url');
 var tress = require('tress');
 var needle = require('needle');
 var cheerio = require('cheerio');
@@ -23,11 +23,85 @@ app.get('/', function(req, res) {
     res.send('API for extraction titles');
 });
 
+app.post('/api/v1/extract_urls', (req, res) => {
+    var results = [];
+    var URL = req.body.url;
+    var parse  = parseurl.parse(URL);
+    var push_id = 1;
+    var q = tress(function(url, callback){
+        //тут мы обрабатываем страницу с адресом url
+        needle.get(url, options, function(err, res, body){
+            if (err) throw err;
+            body = body.replace(/<\!--.*?-->/gs, "");
+            body = body.replace(/<noscript>.*?<\/noscript>/gs, "");
+            var $ = cheerio.load(body);
+            var links = $("a");
+
+            $(links).each(function(i, link){
+                if($(link).attr('rel')=='nofollow')
+                    return;
+                var href = $(link).attr('href');
+
+                if(href===undefined) {
+                    return;
+                }
+                var extension = href.split('.').pop().toLowerCase();
+                var extensions = ["gif", "jpg", "jpeg", "png", "tiff", "tif", "mp3", "mpeg", "flv", "mov", "3gp", "avi", "ogg", "vob", "doc","docx", "djvu", "fb2", "pdf"];
+                if(extensions.indexOf(extension)!==-1) {
+                    return;
+                }
+                if(href=='/') {
+                    href = parse.protocol+'//'+parse.hostname;
+                }
+                if(href.indexOf('//')===0) {
+                    return;
+                }
+                if(href.indexOf(':')!==-1) {
+                    var p = parseurl.parse(href);
+                    if(p.hostname!=parse.hostname && 'www.'+p.hostname!=parse.hostname && p.hostname!='www.'+parse.hostname)  {
+                        return;
+                    }
+                }
+                if(href.indexOf('http')===-1) {
+                    if(href.indexOf('/')===0) {
+                        href = parse.protocol+'//'+parse.hostname+href;
+                    } else {
+                        href = parse.protocol+'//'+parse.hostname+'/'+href;
+                    }
+                }
+                if(results===undefined)
+                    results = [];
+                href = href.split('#')[0];
+                href = href.split('?')[0];
+                if(href.charAt(href.length-1)=='/') {
+                    href = href.substring(0, href.length-1)
+                }
+                if(href!='')
+                    results.push(href);
+            });
+            results = results.filter( onlyUnique );
+
+            if(results.length<500 && push_id<25 && results[push_id]!==undefined) {
+                q.push(results[push_id]);
+                push_id++;
+            }
+
+            callback(); //вызываем callback в конце
+        });
+    }, 10);
+    // эта функция выполнится, когда в очереди закончатся ссылки
+    q.drain = function(){
+        res.status(200).json(JSON.stringify(results));
+    }
+
+// добавляем в очередь ссылку на первую страницу списка
+    q.push(URL);
+});
+
 app.post('/api/v1/extract', (req, res) => {
     var results = [];
     var URL = req.body.urls;
     var q = tress(function(url, callback){
-
         //тут мы обрабатываем страницу с адресом url
         needle.get(url, options, function(err, res, body){
             if (err) throw err;
@@ -92,4 +166,8 @@ function countWords(sentence) {
     });
 
     return index;
+}
+
+function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
 }
