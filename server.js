@@ -88,7 +88,7 @@ app.post('/api/v1/extract_urls', (req, res) => {
 
             callback(); //вызываем callback в конце
         });
-    }, 10);
+    }, 5);
     // эта функция выполнится, когда в очереди закончатся ссылки
     q.drain = function(){
         res.status(200).json(JSON.stringify(results));
@@ -105,33 +105,35 @@ app.post('/api/v1/extract', (req, res) => {
         //тут мы обрабатываем страницу с адресом url
         needle.get(url, options, function(err, res, body){
             if (err) throw err;
-            body = body.replace(/<\!--.*?-->/gs, "");
-            body = body.replace(/<noscript>.*?<\/noscript>/gs, "");
-            body = pretty.prettyPrint(body);
-            var text = h2p(body);
-            var symbols_count_without_space = text.replace(/\s/gs, '').length;
+            if(typeof body!=="object") {
+                body = body.replace(/<\!--.*?-->/gs, "");
+                body = body.replace(/<noscript>.*?<\/noscript>/gs, "");
+                body = pretty.prettyPrint(body);
+                var text = h2p(body);
+                var symbols_count_without_space = text.replace(/\s/gs, '').length;
 
-            var symbols_count= text.replace(/\s{2,}/gs, ' ').length;
-            text = text.replace(/-\s/gs, "");
-            // text = text.replace(/\[(.*?)\]/gs, "");
-            text = text.replace(/[,?!:;()"*']/gs, " ");
+                var symbols_count= text.replace(/\s{2,}/gs, ' ').length;
+                text = text.replace(/-\s/gs, "");
+                // text = text.replace(/\[(.*?)\]/gs, "");
+                text = text.replace(/[,?!:;()"*']/gs, " ");
 
-            var words = countWords(text.toLowerCase());
-            var word_count = Object.values(words).reduce((a, b) => a + b, 0)
-            var $ = cheerio.load(body);
-            var title = $("title").text();
-            var description = $("meta[name='description']").attr('content') || '';
-            var nosnippets = $("meta[name='robots']").attr('content') || '';
-            results.push({
-                url: url,
-                title: title.replace(/\s{2,}/gs, ' '),
-                description: description.replace(/\s{2,}/gs, ' '),
-                nosnippets: nosnippets,
-                words: words,
-                wordcount: word_count,
-                symbolscountws: symbols_count_without_space,
-                symbolscount: symbols_count
-            });
+                var words = countWords(text.toLowerCase());
+                var word_count = Object.values(words).reduce((a, b) => a + b, 0)
+                var $ = cheerio.load(body);
+                var title = $("title").text();
+                var description = $("meta[name='description']").attr('content') || '';
+                var nosnippets = $("meta[name='robots']").attr('content') || '';
+                results.push({
+                    url: url,
+                    title: title.replace(/\s{2,}/gs, ' '),
+                    description: description.replace(/\s{2,}/gs, ' '),
+                    nosnippets: nosnippets,
+                    words: words,
+                    wordcount: word_count,
+                    symbolscountws: symbols_count_without_space,
+                    symbolscount: symbols_count
+                });
+            }
 
             callback(); //вызываем callback в конце
         });
