@@ -149,6 +149,26 @@ app.post('/api/v1/extract', (req, res) => {
 
 });
 
+app.post('/api/v1/extract_html', (req, res) => {
+    var results = '';
+    var URL = req.body.url;
+    var q = tress(function(url, callback){
+        //тут мы обрабатываем страницу с адресом url
+        needle.get(url, options, function(err, res, body){
+            if (err) throw err;
+            results = body;
+            callback(); //вызываем callback в конце
+        });
+    }, 5);
+    // эта функция выполнится, когда в очереди закончатся ссылки
+    q.drain = function(){
+        // res.status(200).json(JSON.stringify(results));
+        res.send(results);
+    }
+
+// добавляем в очередь ссылку на первую страницу списка
+    q.push(URL);
+});
 
 var server = app.listen(8080, ip);
 module.exports = app;
