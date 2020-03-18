@@ -12,6 +12,7 @@ var h2p = require('html2plaintext');
 var options = {
     compressed         : false, // sets 'Accept-Encoding' to 'gzip, deflate, br'
     follow_max         : 5,    // follow up to five redirects
+    rejectUnauthorized : false
 }
 var app = express();
 
