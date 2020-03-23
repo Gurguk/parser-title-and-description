@@ -20,7 +20,8 @@
     "iconv-lite": "^0.5.1",
     "needle": "^2.3.2",
     "request": "^2.88.0",
-    "tress": "^1.1.4"
+    "tress": "^1.1.4",
+    "tunnel": "0.0.6"
   },
   "engine": {
     "node": "*",

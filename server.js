@@ -9,6 +9,11 @@ var bodyParser = require('body-parser');
 var timeout = require('connect-timeout');
 var pretty = require('html');
 var h2p = require('html2plaintext');
+needle.defaults({
+    open_timeout: 20000,
+    user_agent: 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
+});
+
 var options = {
     compressed         : false, // sets 'Accept-Encoding' to 'gzip, deflate, br'
     follow_max         : 5,    // follow up to five redirects
