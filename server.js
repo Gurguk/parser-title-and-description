@@ -128,9 +128,7 @@ app.post('/api/v1/extract', (req, res) => {
                 var word_count = Object.values(words).reduce((a, b) => a + b, 0)
                 var $ = cheerio.load(body);
                 var title = $("title").text();
-                title = title.replace(/[^\s0-9a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ-]/, '');
                 var description = $("meta[name='description']").attr('content') || '';
-                description = description.replace(/[^\s0-9a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ-]/, '');
                 var nosnippets = $("meta[name='robots']").attr('content') || '';
                 results.push({
                     url: url,
