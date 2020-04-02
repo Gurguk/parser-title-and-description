@@ -10,7 +10,7 @@ var timeout = require('connect-timeout');
 var pretty = require('html');
 var h2p = require('html2plaintext');
 needle.defaults({
-    open_timeout: 20000,
+    open_timeout: 40000,
     user_agent: 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
 });
 
@@ -128,7 +128,9 @@ app.post('/api/v1/extract', (req, res) => {
                 var word_count = Object.values(words).reduce((a, b) => a + b, 0)
                 var $ = cheerio.load(body);
                 var title = $("title").text();
+                title = title.replace(/[^\s0-9a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ-]/, '');
                 var description = $("meta[name='description']").attr('content') || '';
+                description = description.replace(/[^\s0-9a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ-]/, '');
                 var nosnippets = $("meta[name='robots']").attr('content') || '';
                 results.push({
                     url: url,
