@@ -36,6 +36,9 @@ app.post('/api/v1/extract_urls', (req, res) => {
     var push_id = 1;
     var q = tress(function(url, callback){
         //тут мы обрабатываем страницу с адресом url
+        if(decodeURI(url)==url && encodeURI(url)!=url) {
+            url = encodeURI(url);
+        }
         needle.get(url, options, function(err, res, body){
             if (err) throw err;
             if(typeof body!=="object") {
@@ -110,6 +113,9 @@ app.post('/api/v1/extract', (req, res) => {
     var URL = req.body.urls;
     var q = tress(function(url, callback){
         //тут мы обрабатываем страницу с адресом url
+        if(decodeURI(url)==url && encodeURI(url)!=url) {
+            url = encodeURI(url);
+        }
         needle.get(url, options, function(err, res, body){
             if (err) throw err;
             if(typeof body!=="object") {
@@ -160,6 +166,9 @@ app.post('/api/v1/extract_html', (req, res) => {
     var URL = req.body.url;
     var q = tress(function(url, callback){
         //тут мы обрабатываем страницу с адресом url
+        if(decodeURI(url)==url && encodeURI(url)!=url) {
+            url = encodeURI(url);
+        }
         needle.get(url, options, function(err, res, body){
             if (err) throw err;
             results = body;
