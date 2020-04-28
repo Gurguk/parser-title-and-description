@@ -9,6 +9,7 @@ var bodyParser = require('body-parser');
 var timeout = require('connect-timeout');
 var pretty = require('html');
 var h2p = require('html2plaintext');
+var createHtmlDom = require('htmldom');
 needle.defaults({
     open_timeout: 40000,
     user_agent: 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
@@ -121,7 +122,13 @@ app.post('/api/v1/extract', (req, res) => {
             if(typeof body!=="object") {
                 body = body.replace(/<\!--.*?-->/gs, "");
                 body = body.replace(/<noscript>.*?<\/noscript>/gs, "");
-                body = pretty.prettyPrint(body);
+                body = body.replace(/<script([\S\s]*?)>([\S\s]*?)<\/script>/ig, "");
+                body = body.replace(/<style([\S\s]*?)>([\S\s]*?)<\/style>/ig, "");
+                var $ = createHtmlDom(body);
+                body = $.beautify({
+                    indent: '  '
+                });
+                // body = pretty.prettyPrint(body);
                 var text = h2p(body);
                 var symbols_count_without_space = text.replace(/\s/gs, '').length;
 
