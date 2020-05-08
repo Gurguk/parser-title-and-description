@@ -10,6 +10,7 @@ var timeout = require('connect-timeout');
 var pretty = require('html');
 var h2p = require('html2plaintext');
 var createHtmlDom = require('htmldom');
+var XRegExp = require('xregexp');
 needle.defaults({
     open_timeout: 40000,
     user_agent: 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
@@ -201,7 +202,9 @@ function countWords(sentence) {
             .split(" ");
 
     words.forEach(function (word) {
-        word = word.replace(/[^0-9a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ-]/gi, "");
+        var regex = new XRegExp("[^\\p{L}\\p{N}\\s-]","gi");
+        word = XRegExp.replace(word, regex, "");
+        // word = word.replace(/[^0-9a-zA-ZаАбБвВгГдДеЕёЁжЖзЗиИйЙкКлЛмМнНоОпПрРсСтТуУфФхХцЦчЧшШщЩъЪыЫьЬэЭюЮяЯ-]/gi, "");
         if(word!='') {
             if (!(index.hasOwnProperty(word))) {
                 index[word] = 0;

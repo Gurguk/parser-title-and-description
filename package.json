@@ -22,7 +22,8 @@
     "needle": "^2.3.2",
     "request": "^2.88.0",
     "tress": "^1.1.4",
-    "tunnel": "0.0.6"
+    "tunnel": "0.0.6",
+    "xregexp": "^4.3.0"
   },
   "engine": {
     "node": "*",
