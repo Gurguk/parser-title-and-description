@@ -1,9 +1,9 @@
 {
   "name": "nodeparser",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "server2.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node server2.js",
     "test": "IP=0.0.0.0 PORT=3030 mocha --timeout 5000 tests/*_test.js"
   },
   "keywords": [],
@@ -20,6 +20,7 @@
     "htmldom": "^4.0.11",
     "iconv-lite": "^0.5.1",
     "needle": "^2.3.2",
+    "puppeteer": "^3.0.4",
     "request": "^2.88.0",
     "tress": "^1.1.4",
     "tunnel": "0.0.6",
