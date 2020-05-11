@@ -1,7 +1,7 @@
 {
   "name": "nodeparser",
   "version": "1.0.0",
-  "main": "server2.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server2.js",
     "test": "IP=0.0.0.0 PORT=3030 mocha --timeout 5000 tests/*_test.js"
