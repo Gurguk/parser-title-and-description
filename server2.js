@@ -46,7 +46,7 @@ app.post('/api/v1/extract_urls', (req, res) => {
         }
 
         let scrape = async () => {
-            const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+            const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']);
             const page = await browser.newPage();
             await page.goto(url);
             let bodyHTML = await page.evaluate(() => document.documentElement.outerHTML);
@@ -191,7 +191,7 @@ app.post('/api/v1/extract', (req, res) => {
             url = encodeURI(url);
         }
         let scrape = async () => {
-            const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+            const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']);
             const page = await browser.newPage();
             await page.goto(url);
             let bodyHTML = await page.evaluate(() => document.documentElement.outerHTML);
@@ -298,7 +298,7 @@ app.post('/api/v1/extract_html', (req, res) => {
             url = encodeURI(url);
         }
         let scrape = async () => {
-            const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+            const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']);
             const page = await browser.newPage();
             await page.goto(url);
             let bodyHTML = await page.evaluate(() => document.documentElement.outerHTML);
