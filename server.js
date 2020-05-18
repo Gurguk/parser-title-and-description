@@ -141,7 +141,7 @@ app.post('/api/v1/extract', (req, res) => {
                 var words = countWords(text.toLowerCase());
                 var word_count = Object.values(words).reduce((a, b) => a + b, 0)
                 var $ = cheerio.load(body);
-                var title = $("title").text();
+                var title = $('head').children('title').text();
                 var description = $("meta[name='description']").attr('content') || '';
                 var nosnippets = $("meta[name='robots']").attr('content') || '';
                 results.push({
