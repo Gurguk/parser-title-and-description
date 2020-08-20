@@ -193,6 +193,36 @@ app.post('/api/v1/extract_html', (req, res) => {
     q.push(URL);
 });
 
+
+app.post('/api/v1/pagespeed', (req, res) => {
+    var results = [];
+    var URL = req.body.urls;
+    var q = tress(function(url, callback){
+        //тут мы обрабатываем страницу с адресом url
+        if(decodeURI(url)==url && encodeURI(url)!=url) {
+            url = encodeURI(url);
+        }
+        needle.get(url, options, function(err, res, body){
+            if (err) throw err;
+            const score = (body.lighthouseResult.categories.performance.score);
+            const type = (body.lighthouseResult.configSettings.emulatedFormFactor);
+            results.push({
+                url: url,
+                score: score,
+                type: type,
+            });
+            callback(); //вызываем callback в конце
+        });
+    }, 10);
+    // эта функция выполнится, когда в очереди закончатся ссылки
+    q.drain = function(){
+        res.status(200).json(JSON.stringify(results));
+    }
+
+// добавляем в очередь ссылку на первую страницу списка
+    q.push(URL);
+});
+
 var server = app.listen(8080, ip);
 module.exports = app;
 function countWords(sentence) {
