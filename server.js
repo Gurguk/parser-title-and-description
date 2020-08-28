@@ -209,6 +209,7 @@ app.post('/api/v1/pagespeed', (req, res) => {
             results.push({
                 url: url,
                 score: score,
+                lighthouse: body.lighthouseResult,
                 type: type,
             });
             callback(); //вызываем callback в конце
