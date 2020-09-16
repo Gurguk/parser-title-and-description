@@ -19,7 +19,8 @@ needle.defaults({
 var options = {
     compressed         : false, // sets 'Accept-Encoding' to 'gzip, deflate, br'
     follow_max         : 5,    // follow up to five redirects
-    rejectUnauthorized : false
+    // rejectUnauthorized : false,
+    parse              : false
 }
 var app = express();
 
@@ -186,6 +187,7 @@ app.post('/api/v1/extract_html', (req, res) => {
     // эта функция выполнится, когда в очереди закончатся ссылки
     q.drain = function(){
         // res.status(200).json(JSON.stringify(results));
+        res.set('Content-Type', 'text/xml');
         res.send(results);
     }
 
@@ -209,7 +211,7 @@ app.post('/api/v1/pagespeed', (req, res) => {
             results.push({
                 url: url,
                 score: score,
-                lighthouse: body.lighthouseResult,
+                // lighthouse: body.lighthouseResult,
                 type: type,
             });
             callback(); //вызываем callback в конце
